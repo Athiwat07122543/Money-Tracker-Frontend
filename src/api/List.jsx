@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const getList = async (date) => {
   try {
-    const res = await axios.get(`http://localhost:3000/api/list?date=${date}`);
+    const res = await axios.get(`https://money-tracker-backend-zca1.vercel.app/api/list?date=${date}`);
     return res;
   } catch (err) {
     console.log(err);
@@ -12,7 +12,7 @@ export const getList = async (date) => {
 
 export const getSummary = async (date) => {
   try {
-    const res = await axios.get(`http://localhost:3000/api/summary?date=${date}`);
+    const res = await axios.get(`https://money-tracker-backend-zca1.vercel.app/api/summary?date=${date}`);
     return res;
   } catch (err) {
     console.log(err);
