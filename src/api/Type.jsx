@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const addType = async (name) => {
   try {
-    const res = await axios.post("http://localhost:5173/api/type", name);
+    const res = await axios.post("https://money-tracker-backend-zca1.vercel.app/api/type", name);
     return res;
   } catch (err) {
     console.log(err);
@@ -12,7 +12,7 @@ export const addType = async (name) => {
 
 export const getType = async () => {
   try {
-    const res = await axios.get("http://localhost:5173/api/type");
+    const res = await axios.get("https://money-tracker-backend-zca1.vercel.app/api/type");
     return res;
   } catch (err) {
     console.log(err);
@@ -22,7 +22,7 @@ export const getType = async () => {
 
 export const deleteType = async (id) => {
   try {
-    const res = await axios.delete("http://localhost:5173/api/type/" + id);
+    const res = await axios.delete("https://money-tracker-backend-zca1.vercel.app/api/type/" + id);
     return res;
   } catch (err) {
     console.log(err);
