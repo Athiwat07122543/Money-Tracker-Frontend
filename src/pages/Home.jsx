@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import MainNav from "../components/MainNav";
 import Input from "../components/Input";
 import ShowList from "../components/ShowList";
 
 const Home = () => {
   return (
-    <div className="p-10 bg-gray-100 h-screen border flex justify-center">
-      <div className="w-1/2">
-        <div className="">
+    <div className="p-10 bg-gray-100 h-screen flex justify-center">
+      <div className="w-2/3">
+        <div>
           <MainNav />
         </div>
         <div className="flex space-x-4 mt-4">

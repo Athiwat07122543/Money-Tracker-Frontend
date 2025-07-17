@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { addType, deleteType, getType } from "../../api/Type";
+import { toast } from 'react-toastify';
 
 const TypeCard = ({ onClose }) => {
   const [type, setType] = useState({ name: null });
@@ -10,7 +11,7 @@ const TypeCard = ({ onClose }) => {
       const res = await getType();
       return setListType(res.data);
     } catch (err) {
-      console.log(err);
+      return console.log(err);
     }
   };
 
@@ -20,7 +21,7 @@ const TypeCard = ({ onClose }) => {
       return;
       setListType(res.data);
     } catch (err) {
-      console.log(err);
+      return console.log(err);
     }
   };
 
@@ -31,7 +32,8 @@ const TypeCard = ({ onClose }) => {
   const handleAddType = async () => {
     try {
       const res = await addType(type);
-      return;
+      await resetListType();
+      return toast.success("เพิ่มตัวเลือกสำเร็จ")
     } catch (err) {
       return console.log(err);
     }
@@ -41,7 +43,7 @@ const TypeCard = ({ onClose }) => {
     try {
       const res = await deleteType(id);
       await resetListType();
-      return;
+      return toast.success("ลบตัวเลือกสำเร็จ")
     } catch (err) {
       return console.log(err);
     }
@@ -49,8 +51,8 @@ const TypeCard = ({ onClose }) => {
 
   return (
     <div>
-      <div className="space-y-2">
-        <div className="">ตัวเลือก</div>
+      <div className="space-y-2 mt-2">
+        <div>ตัวเลือก</div>
         <input
           className="w-full border h-[40px] px-2 rounded-xl"
           onChange={(e) =>
@@ -58,7 +60,7 @@ const TypeCard = ({ onClose }) => {
           }
         />
         <button
-          className=" p-2 border bg-green-500 border-gray-300 hover:bg-green-600 rounded-md text-white"
+          className=" p-2 border bg-green-500 border-gray-300 hover:bg-green-600 rounded-md text-white hover:cursor-pointer"
           onClick={handleAddType}
         >
           บันทึก
@@ -98,7 +100,9 @@ const TypeCard = ({ onClose }) => {
                   </tr>
                 ))
             ) : (
-              <div>ไม่มีข้อมูล</div>
+              <tr>
+                <td colSpan={2}>ไม่มีตัวเลือก</td>
+              </tr>
             )}
           </tbody>
         </table>

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { addExpense } from "../../api/Expense";
+import useStore from "../../store/UseStore";
 
 const ExpenseCard = () => {
   const [expense, setExpense] = useState({ reason: null, amount: null });
+  const getList = useStore((state) => state.getList)
 
   useEffect(() => {
     console.log(expense);
@@ -16,7 +18,8 @@ const ExpenseCard = () => {
         return console.log("กรุณาจำนวนเงิน");
       }
       const res = await addExpense(expense);
-      return console.log(res);
+      toast.success("บันทึกรายจ่ายสำเร็จ")
+      return getList()
     } catch (err) {
       return console.log(err);
     }
@@ -24,14 +27,14 @@ const ExpenseCard = () => {
 
   return (
     <div className="space-y-2 mt-2 px-2">
-      <div className="text-xl">เหตุผล</div>
+      <div>เหตุผล</div>
       <input
         className="w-full border h-[40px] px-2 rounded-xl"
         onChange={(e) =>
           setExpense((prev) => ({ ...prev, reason: e.target.value }))
         }
       />
-      <div className="text-xl">ราคา</div>
+      <div>ราคา</div>
       <input
         className="w-full border h-[40px] px-2 rounded-xl"
         type="Number"
@@ -40,7 +43,7 @@ const ExpenseCard = () => {
         }
       />
       <button
-        className=" p-2 border bg-green-500 border-gray-300 hover:bg-green-600 rounded-md text-white"
+        className=" p-2 border bg-green-500 border-gray-300 hover:bg-green-600 rounded-md text-white hover:cursor-pointer"
         onClick={handleAddExpense}
       >
         บันทึก

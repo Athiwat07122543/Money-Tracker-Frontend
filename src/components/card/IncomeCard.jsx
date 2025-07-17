@@ -1,21 +1,37 @@
 import React, { use, useEffect, useState } from "react";
 import { getType } from "../../api/Type";
 import { addIncome } from "../../api/Income";
+import useStore from "../../store/UseStore";
+import { toast } from 'react-toastify';
 
 const IncomeCard = () => {
   const [dropdown, setDropdown] = useState(false);
   const [type, setType] = useState([]);
+  const getList = useStore((state) => state.getList)
   const [income, setIncome] = useState({
     typeId: null,
     amount: null,
     count: null,
   });
+
   const getListType = async () => {
     try {
       const res = await getType();
       return setType(res.data);
     } catch (err) {
       return console.log(err);
+    }
+  };
+
+  const resetIncome = async () => {
+    try {
+      setIncome({
+        typeId: null,
+        amount: "",
+        count: ""
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -32,17 +48,19 @@ const IncomeCard = () => {
       } else if (!income.count) {
         return console.log("กรุณาใส่จำนวน");
       }
-      const res = await addIncome( income );
-      return console.log(res);
+      const res = await addIncome(income);
+      await getList()
+      await resetIncome()
+      return toast.success("บันทึกรายรับสำเร็จ")
     } catch (err) {
       console.log(err);
     }
   };
   return (
     <div className="space-y-2 mt-2 px-2">
-      <div className="">ตัวเลือก</div>
+      <div>ตัวเลือก</div>
       <button
-        className="w-full border h-[40px] px-2 rounded-xl relative"
+        className="w-full border h-[40px] px-2 rounded-xl relative hover:cursor-pointer"
         onClick={() => setDropdown((prev) => !prev)}
       >
         {type.find((item) => item.id === income.typeId)?.name || "ตัวเลือก"}
@@ -71,6 +89,7 @@ const IncomeCard = () => {
       </div>
       <div className="">ราคา</div>
       <input
+        value={income.amount ?? ""}
         className="w-full border h-[40px] px-2 rounded-xl"
         onChange={(e) =>
           setIncome((prev) => ({ ...prev, amount: Number(e.target.value) }))
@@ -79,6 +98,7 @@ const IncomeCard = () => {
       />
       <div className="">จำนวน</div>
       <input
+        value={income.count ?? ""}
         className="w-full border h-[40px] px-2 rounded-xl"
         onChange={(e) =>
           setIncome((prev) => ({ ...prev, count: Number(e.target.value) }))
@@ -86,7 +106,7 @@ const IncomeCard = () => {
         type="Number"
       />
       <button
-        className=" p-2 border bg-green-500 border-gray-300 hover:bg-green-600 rounded-md text-white"
+        className=" p-2 border bg-green-500 border-gray-300 hover:bg-green-600 rounded-md text-white hover:cursor-pointer"
         onClick={handleAddIncome}
       >
         บันทึก
