@@ -63,7 +63,8 @@ const IncomeCard = () => {
         className="w-full border h-[40px] px-2 rounded-xl relative hover:cursor-pointer"
         onClick={() => setDropdown((prev) => !prev)}
       >
-        {type.find((item) => item.id === income.typeId)?.name || "ตัวเลือก"}
+        {Array.isArray(type) && type.find((item) => item.id === income.typeId)?.name || "ตัวเลือก"}
+
       </button>
       <div className="absolute w-[270px] text-center overflow-y-scroll max-h-[220px]">
         {Array.isArray(type) ? (
@@ -81,6 +82,7 @@ const IncomeCard = () => {
               value={item.name}
             >
               {item.name}
+
             </div>
           ))
         ) : (
