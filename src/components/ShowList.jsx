@@ -1,15 +1,17 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import useStore from "../store/UseStore";
 import moment from "moment"
 
 const ShowList = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const list = useStore((state) => state.list)
   const getList = useStore((state) => state.getList)
   const date = useStore((state) => state.date)
 
   useEffect(() => {
     getList()
+    setIsLoading(true)
+
   }, [getList])
 
   useEffect(() => {
@@ -19,9 +21,9 @@ const ShowList = () => {
   return (
     <div className="relative bg-white rounded-2xl shadow-2xl w-full px-2 py-4">
       <div className="p-4 w-full">
-        <table className="w-full text-center">
+        {isLoading ? <table className="w-full text-center">
           <thead>
-            <tr className="h-[40px]">
+            <tr className="h-[40px] shadow-md border border-gray-300">
               <th className=" bg-gray-200">รายการ</th>
               <th className=" bg-gray-200">เหตุผล</th>
               <th className=" bg-gray-200">ราคา</th>
@@ -50,12 +52,14 @@ const ShowList = () => {
                 </tr>
               ))
             ) : (
-              <tr className="text-center">
-                <td colSpan="4">ไม่มีข้อมูล</td>
+              <tr className="text-center font-bold text-xl">
+                <td colSpan="6">ไม่มีรายกาย</td>
               </tr>
             )}
           </tbody>
-        </table>
+        </table> :
+          <div>กำลังโหลดข้อมูล</div>
+        }
       </div>
     </div>
   );

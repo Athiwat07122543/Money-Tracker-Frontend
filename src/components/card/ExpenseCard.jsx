@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { addExpense } from "../../api/Expense";
 import useStore from "../../store/UseStore";
+import { toast } from 'react-toastify';
 
 const ExpenseCard = () => {
   const [expense, setExpense] = useState({ reason: null, amount: null });
   const getList = useStore((state) => state.getList)
 
-  useEffect(() => {
-    console.log(expense);
-  }, [expense]);
+
 
   const handleAddExpense = async () => {
     try {
@@ -17,7 +16,7 @@ const ExpenseCard = () => {
       } else if (!expense.amount) {
         return console.log("กรุณาจำนวนเงิน");
       }
-      const res = await addExpense(expense);
+      await addExpense(expense);
       toast.success("บันทึกรายจ่ายสำเร็จ")
       return getList()
     } catch (err) {
@@ -29,14 +28,14 @@ const ExpenseCard = () => {
     <div className="space-y-2 mt-2 px-2">
       <div>เหตุผล</div>
       <input
-        className="w-full border h-[40px] px-2 rounded-xl"
+        className="w-full border h-[40px] px-4 rounded-xl bg-gray-300 border-gray-400 shadow-xl"
         onChange={(e) =>
           setExpense((prev) => ({ ...prev, reason: e.target.value }))
         }
       />
       <div>ราคา</div>
       <input
-        className="w-full border h-[40px] px-2 rounded-xl"
+        className="w-full border h-[40px] px-4 rounded-xl bg-gray-300 border-gray-400 shadow-xl"
         type="Number"
         onChange={(e) =>
           setExpense((prev) => ({ ...prev, amount: Number(e.target.value) }))

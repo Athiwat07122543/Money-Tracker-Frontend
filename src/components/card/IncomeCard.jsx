@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getType } from "../../api/Type";
 import { addIncome } from "../../api/Income";
 import useStore from "../../store/UseStore";
@@ -48,7 +48,7 @@ const IncomeCard = () => {
       } else if (!income.count) {
         return console.log("กรุณาใส่จำนวน");
       }
-      const res = await addIncome(income);
+      await addIncome(income);
       await getList()
       await resetIncome()
       return toast.success("บันทึกรายรับสำเร็จ")
@@ -56,33 +56,30 @@ const IncomeCard = () => {
       console.log(err);
     }
   };
+
   return (
     <div className="space-y-2 mt-2 px-2">
       <div>ตัวเลือก</div>
       <button
-        className="w-full border h-[40px] px-2 rounded-xl relative hover:cursor-pointer"
-        onClick={() => setDropdown((prev) => !prev)}
-      >
+        className="w-full border bg-gray-300 border-gray-400 shadow-xl h-[40px] px-4 rounded-xl relative hover:cursor-pointer"
+        onClick={() => setDropdown((prev) => !prev)}>
         {Array.isArray(type) && type.find((item) => item.id === income.typeId)?.name || "ตัวเลือก"}
-
       </button>
-      <div className="absolute w-[270px] text-center overflow-y-scroll max-h-[220px]">
+      <div className="absolute w-[270px] text-center overflow-y-scroll max-h-[220px] border border-gray-200">
         {Array.isArray(type) ? (
           dropdown &&
           type &&
           type.length > 0 &&
           type.map((item, index) => (
             <div
-              className=" hover:cursor-pointer  bg-gray-100 border"
+              className=" hover:cursor-pointer  bg-gray-100 border border-gray-300 "
               onClick={() => {
                 setDropdown(false),
                   setIncome((prev) => ({ ...prev, typeId: item.id }));
               }}
               key={index}
-              value={item.name}
-            >
+              value={item.name}>
               {item.name}
-
             </div>
           ))
         ) : (
@@ -92,7 +89,7 @@ const IncomeCard = () => {
       <div className="">ราคา</div>
       <input
         value={income.amount ?? ""}
-        className="w-full border h-[40px] px-2 rounded-xl"
+        className="w-full border h-[40px] px-4 rounded-xl bg-gray-300 border-gray-400 shadow-xl"
         onChange={(e) =>
           setIncome((prev) => ({ ...prev, amount: Number(e.target.value) }))
         }
@@ -101,7 +98,7 @@ const IncomeCard = () => {
       <div className="">จำนวน</div>
       <input
         value={income.count ?? ""}
-        className="w-full border h-[40px] px-2 rounded-xl"
+        className="w-full border h-[40px] px-4 rounded-xl bg-gray-300 border-gray-400 shadow-xl"
         onChange={(e) =>
           setIncome((prev) => ({ ...prev, count: Number(e.target.value) }))
         }

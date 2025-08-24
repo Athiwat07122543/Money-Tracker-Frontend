@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { addType, deleteType, getType } from "../../api/Type";
 import { toast } from 'react-toastify';
 
-const TypeCard = ({ onClose }) => {
+const TypeCard = () => {
   const [type, setType] = useState({ name: null });
   const [listType, setListType] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false)
   const getListType = async () => {
     try {
       const res = await getType();
@@ -18,7 +18,6 @@ const TypeCard = ({ onClose }) => {
   const resetListType = async () => {
     try {
       const res = await getType();
-      return;
       setListType(res.data);
     } catch (err) {
       return console.log(err);
@@ -27,11 +26,12 @@ const TypeCard = ({ onClose }) => {
 
   useEffect(() => {
     getListType();
+    setIsLoading(true)
   }, []);
 
   const handleAddType = async () => {
     try {
-      const res = await addType(type);
+      await addType(type);
       await resetListType();
       return toast.success("เพิ่มตัวเลือกสำเร็จ")
     } catch (err) {
@@ -41,7 +41,7 @@ const TypeCard = ({ onClose }) => {
 
   const handleDeleteType = async (id) => {
     try {
-      const res = await deleteType(id);
+      await deleteType(id);
       await resetListType();
       return toast.success("ลบตัวเลือกสำเร็จ")
     } catch (err) {
@@ -54,7 +54,7 @@ const TypeCard = ({ onClose }) => {
       <div className="space-y-2 mt-2">
         <div>ตัวเลือก</div>
         <input
-          className="w-full border h-[40px] px-2 rounded-xl"
+          className="w-full border h-[40px] px-2 rounded-xl bg-gray-300 border-gray-400 shadow-xl"
           onChange={(e) =>
             setType((prev) => ({ ...prev, name: e.target.value }))
           }
@@ -74,36 +74,41 @@ const TypeCard = ({ onClose }) => {
                 ตัวเลือก
               </th>
               <th className="border border-gray-300 w-1/4 bg-blue-400 text-white">
-                ลบ
+                จัดการ
               </th>
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(listType) ? (
-              listType &&
-              listType.length > 0 &&
-              listType
-                .sort((a, b) => a.id - b.id)
-                .map((item, index) => (
-                  <tr key={index}>
-                    <td className="border border-gray-300 w-3/4 text-center">
-                      {item.name}
-                    </td>
-                    <td className="border border-gray-300 w-1/4 text-center">
-                      <button
-                        onClick={() => handleDeleteType(item.id)}
-                        className="hover:cursor-pointer"
-                      >
-                        ลบ
-                      </button>
-                    </td>
-                  </tr>
-                ))
+            {isLoading ? (
+              Array.isArray(listType) ? (
+                listType &&
+                listType.length > 0 &&
+                listType
+                  .sort((a, b) => a.id - b.id)
+                  .map((item, index) => (
+                    <tr key={index} className="">
+                      <td className="border border-gray-300 w-3/4 text-center">
+                        {item.name}
+                      </td>
+                      <td className="border border-gray-300 w-1/4 text-center">
+                        <button
+                          onClick={() => handleDeleteType(item.id)}
+                          className="hover:cursor-pointer text-center"
+                        >
+                          ลบ
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+              ) : (
+                <tr>
+                  <td colSpan={2}>ไม่มีตัวเลือก</td>
+                </tr>
+              )
             ) : (
               <tr>
-                <td colSpan={2}>ไม่มีตัวเลือก</td>
-              </tr>
-            )}
+                <td className="border border-gray-300 w-3/4 text-center" colSpan={2}>กำลังโหลดข้อมูล</td>
+              </tr>)}
           </tbody>
         </table>
       </div>

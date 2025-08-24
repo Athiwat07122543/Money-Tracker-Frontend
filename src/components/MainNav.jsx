@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import useStore from "../store/UseStore";
 const MainNav = () => {
   const { date, list, selectDate, summary, getListSummary } = useStore();
